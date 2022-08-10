@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDS = credentials('wsjung0516-docker-hub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')
+        PATH = "C:\\Program Files\\Git\\usr\\bin;C:\\Program Files\\Git\\bin;${env.PATH}"
     }
 
     stages {

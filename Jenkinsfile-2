@@ -3,33 +3,32 @@ pipeline {
     environment {
         DOCKER_HUB_CREDS = credentials('wsjung0516-docker-hub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')
+        AWS_DEFAULT_REGION='us-east-1'
     }
 
     stages {
         stage('Hello') {
             steps {
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'wsjung0516-aws-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    AWS("--region=eu-west-1 s3 ls")
-                }
                 sh ''' 
                  aws --version
-                 docker-compose --version
+                 docker info
+                 docker compose version
                 '''
             }
         }
-        stage('Build') {
-            steps {
-                sh 'docker context use default' 
-                sh 'docker-compose build'
-                sh 'docker-compose push'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'docker context use myecscontext' 
-                sh 'docker-compose up'
-                sh 'docker-compose ps --format json'
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         sh 'docker context use default' 
+        //         sh 'docker-compose build'
+        //         sh 'docker-compose push'
+        //     }
+        // }
+        // stage('Deploy') {
+        //     steps {
+        //         sh 'docker context use myecscontext' 
+        //         sh 'docker-compose up'
+        //         sh 'docker-compose ps --format json'
+        //     }
+        // }
     }
 }

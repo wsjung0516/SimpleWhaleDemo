@@ -1,0 +1,8 @@
+version: '3.9'
+x-aws-vpc: "vpc-0dc82693d3ef3417b"
+services:
+  whale1:
+    build: .
+    image: wsjung0516/simplewhale
+    ports:
+      - 80:80

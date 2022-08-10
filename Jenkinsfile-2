@@ -3,8 +3,6 @@ pipeline {
     environment {
         DOCKER_HUB_CREDS = credentials('wsjung0516-docker-hub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')
-        // p = sh 'echo $PATH'
-        PATH = PATH + ':/usr/local/bin/docker-compose'
     }
 
     stages {

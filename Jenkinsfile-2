@@ -10,7 +10,7 @@ pipeline {
             steps {
                 sh ''' 
                  aws --version
-                 aws docker compose --version
+                 docker compose --version
                 '''
             }
         }

@@ -3,7 +3,6 @@ pipeline {
     environment {
         DOCKER_HUB_CREDS = credentials('wsjung0516-docker-hub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')
-        PATH = "C:\\Program Files\\Git\\usr\\bin;C:\\Program Files\\Git\\bin;${env.PATH}"
     }
 
     stages {
@@ -15,19 +14,19 @@ pipeline {
                 '''
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         sh 'docker context use default' 
-        //         sh 'docker-compose build'
-        //         sh 'docker-compose push'
-        //     }
-        // }
-        // stage('Deploy') {
-        //     steps {
-        //         sh 'docker context use myecscontext' 
-        //         sh 'docker-compose up'
-        //         sh 'docker-compose ps --format json'
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                sh 'docker context use default' 
+                sh 'docker-compose build'
+                sh 'docker-compose push'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker context use myecscontext' 
+                sh 'docker-compose up'
+                sh 'docker-compose ps --format json'
+            }
+        }
     }
 }

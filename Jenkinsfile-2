@@ -5,7 +5,9 @@ pipeline {
     //     AWS_CREDS = credentials('wsjung0516-aws-creds')
     //     AWS_DEFAULT_REGION='us-east-1'
     // }
-
+    tools {
+        jdk("Adopt openJDK")
+    }
     stages {
         stage('Hello') {
             steps {

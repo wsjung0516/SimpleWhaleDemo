@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent {label 'linux'}
     environment {
         dockerhub = ('dockerhub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')
@@ -13,11 +13,15 @@ pipeline {
                 '''
             }
         }
+        stage('Login') {
+            steps {
+                sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'docker context use default'
                 sh 'docker compose build'
-                sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
                 sh 'docker compose push'
             }
         }

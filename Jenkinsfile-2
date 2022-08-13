@@ -15,9 +15,10 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'docker context use default' 
+                sh 'docker context use default'
+                sh 'docker context create myecscontext' 
                 sh 'docker compose build'
-                sh 'echo $dockerhub_PSW | docker login -u wsjung0516 --password-stdin'
+                sh 'ho $dockerhub_USR | docker login -u wsjung0516 --password-stdin'
                 sh 'docker compose push'
             }
         }

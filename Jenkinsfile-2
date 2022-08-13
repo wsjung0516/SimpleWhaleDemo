@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        wsjung0516-docker-hub = credentials('wsjung0516-docker-hub')
+        DOCKER_HUB_CREDS = credentials('wsjung0516-docker-hub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')
         AWS_DEFAULT_REGION='us-east-1'
     }

@@ -17,7 +17,7 @@ pipeline {
             steps {
                 sh 'docker context use default'
                 sh 'docker compose build'
-                sh 'docker login -u $dockerhub_USR -p $dockerhub_PSW'
+                sh 'docker login -u $DOCKER_NAME -p $DOCKER_PASSWORD'
                 sh 'docker compose push'
             }
         }

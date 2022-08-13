@@ -18,7 +18,7 @@ pipeline {
                 sh 'docker context use default'
                 sh 'docker context create myecscontext' 
                 sh 'docker compose build'
-                sh 'ho $dockerhub_USR | docker login -u wsjung0516 --password-stdin'
+                sh 'echo $dockerhub_USR | docker login -u wsjung0516 --password-stdin'
                 sh 'docker compose push'
             }
         }

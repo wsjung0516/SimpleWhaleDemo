@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'linux'}
+    agent any
     environment {
         dockerhub = credentials('dockerhub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')

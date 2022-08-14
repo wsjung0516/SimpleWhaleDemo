@@ -1,7 +1,7 @@
 pipeline {
-    agent any
+    agent {label 'linux'}
     environment {
-        dockerhub = ('dockerhub')
+        dockerhub = credentials('dockerhub')
         AWS_CREDS = credentials('wsjung0516-aws-creds')
         AWS_DEFAULT_REGION='us-east-1'
     }

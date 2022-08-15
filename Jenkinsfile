@@ -1,36 +1,59 @@
 pipeline {
     agent any
     environment {
-        dockerhub = credentials('dockerhub')
-        AWS_CREDS = credentials('wsjung0516-aws-creds')
-        AWS_DEFAULT_REGION='us-east-1'
+      AWS_ACCOUNT_ID="863586588248"
+      AWS_DEFAULT_REGION="us-east-1" 
+      CLUSTER_NAME="default"
+      SERVICE_NAME="nodejs-container-service"
+      TASK_DEFINITION_NAME="first-run-task-definition"
+      DESIRED_COUNT="1"
+      IMAGE_REPO_NAME="demo"
+      IMAGE_TAG="${env.BUILD_ID}"
+      REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+      registryCredential = "demo-admin-user"
     }
+   
     stages {
-        stage('Hello') {
-            steps {
-                sh '''
-                    docker compose version
-                '''
-            }
+
+      // Tests
+      stage('Unit Tests') {
+        steps{
+          script {
+            sh 'npm install'
+            sh 'npm test -- --watchAll=false'
+          }
         }
-        stage('Login') {
-            steps {
-                sh 'echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin'
-            }
+      }
+          
+      // Building Docker images
+      stage('Building image') {
+        steps{
+          script {
+            dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+          }
         }
-        stage('Build') {
-            steps {
-                sh 'docker context use default'
-                sh 'docker compose build'
-                sh 'docker compose push'
+      }
+    
+      // Uploading Docker images into AWS ECR
+      stage('Pushing to ECR') {
+        steps{  
+          script {
+            docker.withRegistry("https://" + REPOSITORY_URI, "ecr:${AWS_DEFAULT_REGION}:" + registryCredential) {
+              dockerImage.push()
             }
+          }
         }
-        stage('Deploy') {
-            steps {
-                sh 'docker context use myecscontext' 
-                sh 'docker compose up'
-                sh 'docker compose ps --format json'
+       }
+        
+      stage('Deploy') {
+        steps{
+          withAWS(credentials: registryCredential, region: "${AWS_DEFAULT_REGION}") {
+            script {
+              sh './script.sh'
             }
+          } 
         }
+      }      
     }
 }
+

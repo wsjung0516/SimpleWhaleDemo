@@ -8,7 +8,8 @@ pipeline {
       TASK_DEFINITION_NAME="first-run-task-definition"
       DESIRED_COUNT="1"
       IMAGE_REPO_NAME="demo"
-      IMAGE_TAG="${env.BUILD_ID}"
+      IMAGE_TAG="latest"
+      // IMAGE_TAG="${env.BUILD_ID}"
       REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
       registryCredential = "demo-admin-user"
     }
